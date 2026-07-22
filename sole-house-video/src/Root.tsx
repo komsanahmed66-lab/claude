@@ -4,13 +4,23 @@ import {SoleHouseVideo, TOTAL_DURATION} from './SoleHouseVideo';
 
 export const RemotionRoot: React.FC = () => {
 	return (
-		<Composition
-			id="SoleHouseVertical"
-			component={SoleHouseVideo}
-			durationInFrames={TOTAL_DURATION}
-			fps={30}
-			width={1080}
-			height={1920}
-		/>
+		<>
+			<Composition
+				id="SoleHouseVertical"
+				component={SoleHouseVideo}
+				durationInFrames={TOTAL_DURATION}
+				fps={30}
+				width={1080}
+				height={1920}
+			/>
+			<Composition
+				id="SoleHouseLandscape"
+				component={SoleHouseVideo}
+				durationInFrames={TOTAL_DURATION}
+				fps={30}
+				width={1920}
+				height={1080}
+			/>
+		</>
 	);
 };
