@@ -1,6 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, spring, useCurrentFrame, useVideoConfig, interpolate} from 'remotion';
 import {colors, fonts} from '../theme';
+import {GridBackground} from '../GridBackground';
 
 export const SectionHead: React.FC = () => {
 	const frame = useCurrentFrame();
@@ -18,6 +19,7 @@ export const SectionHead: React.FC = () => {
 				padding: '0 90px',
 			}}
 		>
+			<GridBackground color={colors.ink} />
 			<div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'}}>
 				<div
 					style={{

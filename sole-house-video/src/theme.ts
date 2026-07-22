@@ -1,4 +1,16 @@
 import {staticFile} from 'remotion';
+import {
+	BriefcaseIcon,
+	ClapperIcon,
+	MegaphoneIcon,
+	BoxIcon,
+	PenNibIcon,
+	RefreshIcon,
+	ChatBubbleIcon,
+	BrowserIcon,
+	FilmIcon,
+	StarPersonIcon,
+} from './Icons';
 
 export const colors = {
 	ink: '#000000',
@@ -13,14 +25,21 @@ export const fonts = {
 };
 
 export const services = [
-	'Branding & Identity',
-	'Rebrands & Identity Renewal',
-	'Packaging',
-	'Social Media Management',
-	'Website & E-commerce',
-	'Content & Production',
-	'Media Buying & Ads',
-	'Personal Branding',
+	{name: 'Branding & Identity', Icon: PenNibIcon},
+	{name: 'Rebrands & Identity Renewal', Icon: RefreshIcon},
+	{name: 'Packaging', Icon: BoxIcon},
+	{name: 'Social Media Management', Icon: ChatBubbleIcon},
+	{name: 'Website & E-commerce', Icon: BrowserIcon},
+	{name: 'Content & Production', Icon: FilmIcon},
+	{name: 'Media Buying & Ads', Icon: MegaphoneIcon},
+	{name: 'Personal Branding', Icon: StarPersonIcon},
+];
+
+export const vendorPains = [
+	{label: 'A branding agency.', Icon: BriefcaseIcon},
+	{label: 'A video editor.', Icon: ClapperIcon},
+	{label: 'An ads manager.', Icon: MegaphoneIcon},
+	{label: 'A packaging studio.', Icon: BoxIcon},
 ];
 
 export const fontFaceCss = `
