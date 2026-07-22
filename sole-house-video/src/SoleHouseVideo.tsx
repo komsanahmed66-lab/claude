@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, Series} from 'remotion';
+import {AbsoluteFill, Audio, Series, staticFile} from 'remotion';
 import {Problem, PROBLEM_ITEM_DURATION} from './scenes/Problem';
 import {ProblemPunch} from './scenes/ProblemPunch';
 import {Intro} from './scenes/Intro';
@@ -59,6 +59,7 @@ export const SoleHouseVideo: React.FC = () => {
 	return (
 		<AbsoluteFill>
 			<style>{fontFaceCss}</style>
+			<Audio src={staticFile('music/theme.wav')} volume={0.85} />
 			<SfxTrack events={buildSfxEvents()} />
 			<Series>
 				<Series.Sequence durationInFrames={DURATIONS.problem}>
