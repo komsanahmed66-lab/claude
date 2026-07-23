@@ -5,7 +5,7 @@ import {GridBackground} from '../GridBackground';
 
 const ITEM_DURATION = 50;
 
-const ServiceItem: React.FC<{index: number; name: string; Icon: React.FC<{size?: number; color?: string}>}> = ({
+const ServiceItem: React.FC<{index: number; name: string; Icon: React.FC<{size?: number; color?: string; draw?: number}>}> = ({
 	index,
 	name,
 	Icon,
@@ -14,17 +14,19 @@ const ServiceItem: React.FC<{index: number; name: string; Icon: React.FC<{size?:
 	const {fps} = useVideoConfig();
 
 	const enter = spring({frame, fps, config: {damping: 200, mass: 0.6}});
-	const iconEnter = spring({frame: frame - 4, fps, config: {damping: 14, mass: 0.5, stiffness: 140}});
+	const iconDraw = spring({frame: frame - 3, fps, config: {damping: 30, mass: 0.9}});
+	const iconPop = spring({frame: frame - 3, fps, config: {damping: 15, mass: 0.5, stiffness: 130}});
 	const exitStart = ITEM_DURATION - 13;
 	const exitP = interpolate(frame, [exitStart, ITEM_DURATION], [0, 1], {
 		extrapolateLeft: 'clamp',
 		extrapolateRight: 'clamp',
 	});
 
-	const y = interpolate(enter, [0, 1], [50, 0]) + interpolate(exitP, [0, 1], [0, -50]);
+	// alternate entrance side so back-to-back items don't feel repetitive
+	const dir = index % 2 === 0 ? 1 : -1;
+	const x = interpolate(enter, [0, 1], [dir * 60, 0]) + interpolate(exitP, [0, 1], [0, -dir * 60]);
 	const opacity = interpolate(enter, [0, 1], [0, 1]) * (1 - exitP);
-	const iconScale = interpolate(iconEnter, [0, 1], [0.4, 1]);
-	const iconRotate = interpolate(iconEnter, [0, 1], [-25, 0]);
+	const iconScale = interpolate(iconPop, [0, 1], [0.7, 1]);
 
 	return (
 		<AbsoluteFill style={{backgroundColor: colors.paper, alignItems: 'center', justifyContent: 'center'}}>
@@ -34,7 +36,7 @@ const ServiceItem: React.FC<{index: number; name: string; Icon: React.FC<{size?:
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
-					transform: `translateY(${y}px)`,
+					transform: `translateX(${x}px)`,
 					opacity,
 					padding: '0 80px',
 					textAlign: 'center',
@@ -42,11 +44,11 @@ const ServiceItem: React.FC<{index: number; name: string; Icon: React.FC<{size?:
 			>
 				<div
 					style={{
-						transform: `scale(${iconScale}) rotate(${iconRotate}deg)`,
+						transform: `scale(${iconScale})`,
 						marginBottom: 20,
 					}}
 				>
-					<Icon size={60} color={colors.ink} />
+					<Icon size={60} color={colors.ink} draw={iconDraw} />
 				</div>
 				<div
 					style={{

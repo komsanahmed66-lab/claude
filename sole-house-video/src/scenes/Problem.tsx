@@ -20,7 +20,7 @@ const Tally: React.FC<{count: number; total: number}> = ({count, total}) => (
 	</div>
 );
 
-const PainItem: React.FC<{index: number; label: string; Icon: React.FC<{size?: number; color?: string}>}> = ({
+const PainItem: React.FC<{index: number; label: string; Icon: React.FC<{size?: number; color?: string; draw?: number}>}> = ({
 	index,
 	label,
 	Icon,
@@ -29,8 +29,13 @@ const PainItem: React.FC<{index: number; label: string; Icon: React.FC<{size?: n
 	const {fps} = useVideoConfig();
 
 	const enter = spring({frame, fps, config: {damping: 200, mass: 0.6}});
-	const iconEnter = spring({frame: frame - 3, fps, config: {damping: 13, mass: 0.5, stiffness: 150}});
+	const iconDraw = spring({frame: frame - 4, fps, config: {damping: 30, mass: 0.8}});
 	const exitStart = ITEM_DURATION - 13;
+	// crossed off the list just before it leaves
+	const strikeP = interpolate(frame, [exitStart - 8, exitStart + 2], [0, 1], {
+		extrapolateLeft: 'clamp',
+		extrapolateRight: 'clamp',
+	});
 	const exitP = interpolate(frame, [exitStart, ITEM_DURATION], [0, 1], {
 		extrapolateLeft: 'clamp',
 		extrapolateRight: 'clamp',
@@ -38,7 +43,6 @@ const PainItem: React.FC<{index: number; label: string; Icon: React.FC<{size?: n
 
 	const y = interpolate(enter, [0, 1], [46, 0]) + interpolate(exitP, [0, 1], [0, -46]);
 	const opacity = interpolate(enter, [0, 1], [0, 1]) * (1 - exitP);
-	const iconScale = interpolate(iconEnter, [0, 1], [0.5, 1]);
 
 	return (
 		<AbsoluteFill style={{backgroundColor: colors.ink, alignItems: 'center', justifyContent: 'center'}}>
@@ -55,18 +59,33 @@ const PainItem: React.FC<{index: number; label: string; Icon: React.FC<{size?: n
 					textAlign: 'center',
 				}}
 			>
-				<div style={{transform: `scale(${iconScale})`, marginBottom: 22}}>
-					<Icon size={58} color={colors.paper} />
+				<div style={{marginBottom: 22}}>
+					<Icon size={58} color={colors.paper} draw={iconDraw} />
 				</div>
-				<div
-					style={{
-						fontFamily: fonts.display,
-						fontWeight: 500,
-						color: colors.paper,
-						fontSize: 46,
-					}}
-				>
-					{label}
+				<div style={{position: 'relative'}}>
+					<div
+						style={{
+							fontFamily: fonts.display,
+							fontWeight: 500,
+							color: colors.paper,
+							fontSize: 46,
+							opacity: 1 - strikeP * 0.45,
+						}}
+					>
+						{label}
+					</div>
+					<div
+						style={{
+							position: 'absolute',
+							left: '-4%',
+							top: '52%',
+							width: '108%',
+							height: 3,
+							backgroundColor: colors.paper,
+							transform: `scaleX(${strikeP})`,
+							transformOrigin: 'left center',
+						}}
+					/>
 				</div>
 			</div>
 		</AbsoluteFill>

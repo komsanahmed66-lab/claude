@@ -8,8 +8,10 @@ export const Closing: React.FC = () => {
 	const {fps} = useVideoConfig();
 
 	const markP = spring({frame, fps, config: {damping: 200}});
-	const ctaP = spring({frame: frame - 16, fps, config: {damping: 200}});
+	const ctaP = spring({frame: frame - 16, fps, config: {damping: 13, mass: 0.6, stiffness: 110}});
 	const footP = spring({frame: frame - 30, fps, config: {damping: 200}});
+	// tracking settles from wide to the wordmark's resting letterspacing
+	const tracking = interpolate(markP, [0, 1], [16, 3]);
 
 	return (
 		<AbsoluteFill
@@ -26,7 +28,7 @@ export const Closing: React.FC = () => {
 						fontFamily: fonts.display,
 						fontWeight: 500,
 						fontSize: 56,
-						letterSpacing: 3,
+						letterSpacing: tracking,
 						color: colors.ink,
 						opacity: interpolate(markP, [0, 1], [0, 1]),
 						transform: `translateY(${interpolate(markP, [0, 1], [20, 0])}px)`,
@@ -46,8 +48,12 @@ export const Closing: React.FC = () => {
 						letterSpacing: 2,
 						textTransform: 'uppercase',
 						borderRadius: 999,
-						opacity: interpolate(ctaP, [0, 1], [0, 1]),
-						transform: `translateY(${interpolate(ctaP, [0, 1], [16, 0])}px)`,
+						opacity: interpolate(ctaP, [0, 1], [0, 1], {extrapolateRight: 'clamp'}),
+						transform: `translateY(${interpolate(ctaP, [0, 1], [16, 0])}px) scale(${interpolate(
+							ctaP,
+							[0, 1],
+							[0.9, 1]
+						)})`,
 					}}
 				>
 					Start a project
